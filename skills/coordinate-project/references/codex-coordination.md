@@ -31,7 +31,7 @@ Each worker starts with `git -C <worktree> rev-parse --show-toplevel` and `git -
 
 Use native subagent completion delivery where available. For a separate chat callback, provide the coordinator's actual chat ID/host and the source of explicit human authorization for worker-to-coordinator messaging. Verify that the current tool supports delivering a prompt to that coordinator; do not assume the instruction "report back" will wake it. If callbacks are unavailable or unauthorized, the worker leaves its result in its own chat and the coordinator collects it through read/wait tools.
 
-Request reports at meaningful milestones, completion, blockers, or decisions; avoid routine chatter between agents. Treat a report as input to the acceptance loop, not automatic permission for the next action. A periodic reconciliation can complement callbacks and must check fresh state before dispatching or retrying work.
+Request reports at meaningful milestones, completion, blockers, or decisions using the [worker report format](coordination-record.md#worker-brief-and-report); avoid routine chatter between agents. Treat a report as input to the acceptance loop, not automatic permission for the next action. A periodic reconciliation can complement callbacks and must check fresh state before dispatching or retrying work.
 
 ## Observe and accept
 
@@ -47,7 +47,7 @@ For the ongoing coordination authorized in the skill, use a thread heartbeat for
 
 Before ending the turn, verify that the heartbeat is active and targets this coordinator chat, then record its identity, cadence, and next check. Record any verified completion callback separately; separate worker chats continue independently, and callbacks must satisfy the messaging authorization above. If no supported wakeup can be established, report the limitation and saved resume point without claiming automatic continuation.
 
-Keep its prompt compact: goal and record location, managed chat IDs/hosts and latest wait cursors, active operation IDs, relevant authorization/constraints, next check, notification preference, and terminal/cleanup condition. Reference durable detail instead of accumulating snapshots. Reconcile fresh state rather than assuming the prompt is current.
+Keep its prompt brief and readable: explain the goal and next reconciliation in sentences, with labeled metadata for the record location, managed chat IDs/hosts and latest wait cursors, active operation IDs, relevant authorization/constraints, notification preference, and terminal/cleanup condition. Reference durable detail instead of accumulating snapshots. Reconcile fresh state rather than assuming the prompt is current. When a progress report is due, follow the skill's project-level update guidance.
 
 Honor requests for periodic progress reports. Otherwise stay quiet on unchanged or non-actionable state and notify on meaningful change, completion, failure, or required human action. A heartbeat adds no execution permissions. Stop or delete it when requested or its authorized purpose is complete, and verify the change.
 

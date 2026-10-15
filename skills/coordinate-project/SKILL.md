@@ -7,6 +7,8 @@ description: Coordinate a bounded project or experiment across agent chats and s
 
 Keep the whole effort coherent while workers own bounded execution. The human uses this chat to steer the project and review outcomes. Own progress toward the agreed outcome, including integration and verification; worker completion alone does not establish project completion.
 
+Write coordination in ordinary English, including worker briefs, reports, project records, and heartbeat prompts. Use complete sentences with normal spacing; shorten by removing repetition and linking detail. Use familiar technical terms and explain project-specific shorthand on first use. Keep exact IDs, hashes, commands, and measurements in labeled fields or supporting evidence so they remain available without carrying the explanation.
+
 ## Establish or recover the project
 
 Read current human instructions and relevant existing coordinator/worker chats before proposing new structure. Reuse existing work and permissions. When resuming, reconcile recorded state with current worker and artifact status before dispatching anything.
@@ -21,7 +23,7 @@ Create a compact project record using [references/coordination-record.md](refere
 - Work units, dependencies, owners, chat IDs, workspace/branch, artifacts, and evidence.
 - Material decisions and permissions, including where the human gave them.
 
-Keep the active goal, current milestone, accepted constraints, and next decision in working context. Update the record after material changes; use it to recover after compaction or in later sessions. Link detailed evidence instead of copying transcripts or sensitive data.
+Keep the active goal, current milestone, accepted constraints, and next decision in working context. Update the record after material changes; use it to recover after compaction or in later sessions. Keep a readable current overview at the top, assessed from reconciled evidence, with historical entries and detailed verification below it or linked. Link detailed evidence instead of copying transcripts or sensitive data.
 
 Linear projects and Codex workspace projects are separate concepts. A Linear issue is an optional work-unit link: one issue can need several workers and one work unit can cover several issues. Local experiments need neither projects nor tickets in Linear. Use existing trackers where useful; create or alter tracker structure only within the user's request. For Swell Linear, use MCP exclusively; if unavailable, report the boundary and continue independent local work.
 
@@ -47,7 +49,7 @@ Assign every repository worker, including child subagents, its own Git worktree 
 
 For worker workspace setup and Codex chat tools, read [references/codex-coordination.md](references/codex-coordination.md). Identify managed chats by recorded IDs, not title prefixes alone. Adopt an existing chat only with the user's authorization to manage it.
 
-Give each worker a self-contained brief: parent goal; outcome and acceptance criteria; bounded scope and dependencies; relevant source, standards, and context paths; workspace and artifact expectations; applicable decisions and permissions; review/stop conditions; and handoff evidence. Identify the work unit and its current assignment or attempt; reports carry those identities and the artifact version delivered or checked. Reuse existing IDs when sufficient. Include an absolute record path only when accessible to the worker; otherwise embed the necessary excerpt. Route specialized work through applicable skills.
+Give each worker a self-contained brief: parent goal and how this assignment contributes; outcome and acceptance criteria; bounded scope and dependencies; relevant source, standards, and context paths; workspace and artifact expectations; applicable decisions and permissions; review/stop conditions; and handoff evidence. Require reports to explain what the result enables or changes for the project, its verification and limits, and any affected dependencies or new risks. Identify the work unit and its current assignment or attempt; reports carry those identities and the artifact version delivered or checked. Use the [worker brief and report templates](references/coordination-record.md#worker-brief-and-report), reusing existing IDs when sufficient. Include an absolute record path only when accessible to the worker; otherwise embed the necessary excerpt. Route specialized work through applicable skills.
 
 Before unfamiliar or large-scale delegation where a bad brief would multiply errors, pilot one representative unit through briefing, execution, verification, and handoff. Check that workers have the needed access, the assignment fits, and the evidence can establish acceptance; fix the contract before scaling equivalent assignments. A representative successful prior unit can serve as the pilot. Keep familiar small work lightweight and independent work moving. Take the pilot to its authorized review boundary; it does not add permission to merge, deploy, or write production data, or require a new human gate unless a material decision emerges.
 
@@ -59,9 +61,9 @@ Follow the human's model preferences and task needs. If they request the latest 
 
 1. Dispatch the next unblocked, authorized work and record its owner.
 2. Collect worker milestone, completion, and blocker reports through supported delivery; reconcile compact status and inspect the artifact and evidence. Bind each verification receipt to the acceptance check, exact artifact version or input snapshot, method/environment, and outcome or limits; see the project-record reference. Distinguish reported success from verified acceptance, and local checks from CI, deployment, or live data. When inputs change, repeat affected checks or record why unchanged relevant inputs let earlier evidence apply; retain its original version rather than claiming it was run on the new one.
-3. Check the result against the parent goal and earlier decisions. For experiments, compare against the baseline; passing tests may not establish the intended benefit.
+3. Check the result against the parent goal and earlier decisions. Reassess which acceptance criteria it advances, what remains across workstreams, and whether it changes the dependency blocking the next milestone, scope, or risk. For experiments, compare against the baseline; passing tests may not establish the intended benefit.
 4. Return bounded corrections to the owner, or record verified acceptance before releasing dependents. Reconcile any existing dependent assignment before dispatching it again. Pass actual evidence into dependent briefs. Queued jobs, opened PRs, and successful worker turns are intermediate states.
-5. Update the record and bring a concise milestone review: what changed, evidence, gaps, next step, and any decision needed.
+5. Update the current overview and bring a concise milestone review using the communication guidance below.
 
 Before acting on a late or repeated report, reconcile its work unit, assignment, scope, and artifact version with the current record. An identical processed report has no additional effect: do not launch dependents or repeat mutations again. An obsolete success cannot replace the current result or satisfy newer criteria. Assess genuinely new evidence even when it arrives late, carrying relevant findings into the current assignment or a bounded follow-up. If it invalidates accepted criteria, reopen the affected acceptance, notify affected owners, and hold work relying on that prerequisite until resolved; continue unrelated work. Record the accepted result and processed report pointer/identity in the existing project record; a separate event queue is unnecessary for small efforts.
 
@@ -71,7 +73,9 @@ Monitor without interrupting active work or sending repetitive nudges. Investiga
 
 ## Communicate, resume, and finish
 
-Keep updates outcome-focused: milestone, meaningful change, evidence, blocker/decision, and next step. Follow a requested cadence; otherwise report meaningful changes. Answer user questions and continue the existing project in bounded turns unless they change or stop it.
+Start scheduled progress reports and milestone reviews with where the whole project stands against its intended outcome. Explain how the latest result changes that assessment, what remains across workstreams, what blocks the next milestone, and the next action or human decision. State when the overall assessment is unchanged. A brief answer to a narrow user question can stay focused on that question.
+
+Synthesize worker findings into that assessment and reconcile conflicts before reporting. Include technical detail when it explains the benefit, evidence, uncertainty, or a decision; link the rest. Tie counts to a defined scope or acceptance criterion. Use the [coordinator update example and readability check](references/coordination-record.md#coordinator-updates). Follow a requested cadence; otherwise report meaningful changes. Answer user questions and continue the existing project in bounded turns unless they change or stop it.
 
 For ongoing coordination, dispatch available work, process actionable results, and end the turn once further progress depends only on workers, external checks, a timer, or human input. Before yielding, save current assignments, artifact versions, wait cursors, blockers, and the next reconciliation action in the project record; establish and verify the continuation mechanism below, then give a concise status. Repeated waits or sleeps must not keep an otherwise idle coordinator turn open. A short, bounded subagent investigation or review can wait within the current turn when its results are needed to answer the user.
 
