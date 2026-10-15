@@ -38,7 +38,9 @@ Last reconciled:
 
 ## Follow-up and cleanup
 Worker report delivery / coordinator ID and callback authorization (if applicable):
-Monitor ID, cadence, notification preference, stop condition (if requested):
+Continuation mechanism / verified wakeup behavior:
+Heartbeat ID, cadence, next check, notification preference, stop condition (for ongoing coordination):
+Managed chat wait cursors / active operation IDs:
 Chats needing follow-up or authorized archival:
 Open limitations / deferred work:
 ```
