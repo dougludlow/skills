@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coordinate Project"
+  short_description: "Coordinate project work through reviewable milestones"
+  default_prompt: "Use $coordinate-project to coordinate this project, keep its goals and decisions current, and drive agreed work through reviewable milestones."
