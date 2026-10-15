@@ -10,6 +10,6 @@ From the repository root, run:
 ./install.sh
 ```
 
-The installer links each top-level skill directory into `~/.agents/skills`.
+The installer links each skill directory containing a `SKILL.md` file into `~/.agents/skills`.
 It is safe to rerun and refuses to overwrite conflicting files or links.
 Edits in this repository are immediately available through the installed symlinks.
