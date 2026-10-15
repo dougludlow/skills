@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Babysit'
+  short_description: 'Monitor and repair a GitHub pull request'
+  default_prompt: 'Use $babysit to monitor the pull request in this task, address explicitly approved routine CI and review issues, and stop for judgment calls.'
