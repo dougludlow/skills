@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compliance"
+  short_description: "Review changes against documented repository guidance"
+  default_prompt: "Use $compliance to review the current changes against the repository's applicable instructions, policies, and guidelines, citing the rule and affected code for each finding."
