@@ -1,6 +1,6 @@
 # Compact project record
 
-Use one record, scaled to the effort. Omit fields that add no value. Its current overview should let the human understand the project's position without reconstructing worker activity. Refresh that overview from reconciled evidence after material changes, replacing superseded status. Keep dated history and detailed verification below the current sections or in linked artifacts, with their original scope, version, and observation time. The same separation applies when an existing record uses JSON or another structured format; use a readable summary alongside labeled metadata. Avoid a second ticket system or transcript archive.
+Use one record, scaled to the effort. Omit fields that add no value. Its current overview should let the human understand the project's position without reconstructing worker activity. Refresh that overview and the resume state from reconciled evidence after material changes, replacing superseded status. Keep dated history and detailed verification below the current sections or in linked artifacts, with their original scope, version, and observation time. The same separation applies when an existing record uses JSON or another structured format; read the relevant current fields rather than the whole history. Avoid a second ticket system or transcript archive.
 
 ```markdown
 # <Project or experiment>
@@ -15,21 +15,31 @@ Next action and owner:
 Next human review / decision (or none needed):
 Last reconciled:
 
-## Scope and acceptance
+## Resume state
 Acceptance criteria:
 Scope / excluded work:
 Experiment question, baseline, stopping condition (if applicable):
-Coordinator chat / project prefix:
+Applicable constraints and permissions / human sources:
+Coordinator chat / worker title prefix:
 Tracker and repository links (optional):
 Pilot or representative prior unit (when needed):
+Active operation IDs:
+Worker report delivery / coordinator callback authorization (if applicable):
+Continuation mechanism / identity / verified wakeup behavior / cadence / next check:
+Notification preference / terminal and cleanup condition:
+Next reconciliation action / trigger:
+
+### Active work
+| Work unit / current assignment | Owner chat ID / host or subagent | Scope / dependency | Worktree / branch / verified checkout | State / exact artifact version / accepted result / processed report / wait cursor |
+| --- | --- | --- | --- | --- |
+
+### Monitoring
+| Live check / artifact version | Monitoring owner | Report delivery / latest observation | Backstop / stale-after condition | Stop condition |
+| --- | --- | --- | --- | --- |
 
 ## Milestones
 | Milestone | Outcome and acceptance evidence | Review point | State |
 | --- | --- | --- | --- |
-
-## Work
-| Work unit | Owner chat ID / host or subagent / current assignment | Scope / dependency | Worktree / branch / verified checkout | State / artifact version / accepted result / processed report |
-| --- | --- | --- | --- | --- |
 
 ## Verification receipts
 | Work unit / assignment | Acceptance check | Artifact version / input snapshot | Method / environment | Outcome / evidence / limits |
@@ -40,13 +50,15 @@ Pilot or representative prior unit (when needed):
 | --- | --- | --- |
 
 ## Follow-up and cleanup
-Worker report delivery / coordinator ID and callback authorization (if applicable):
-Continuation mechanism / verified wakeup behavior:
-Heartbeat ID, cadence, next check, notification preference, stop condition (for ongoing coordination):
-Managed chat wait cursors / active operation IDs:
 Chats needing follow-up or authorized archival:
 Open limitations / deferred work:
 ```
+
+## Resume state
+
+Keep the current overview and resume state small enough to read as bounded sections. The resume state carries the effective acceptance criteria, constraints and permissions with their sources, active assignments and versions, report cursors, monitoring ownership, and next action. Keep active facts here once; link detailed briefs and receipts, and move finished assignments to dated history. If a required constraint or approval is missing or ambiguous, read its authoritative source before acting.
+
+Read history and full receipts for changed evidence, conflicts, missing context, or an acceptance decision that needs them. Resume state identifies what to inspect; it does not turn a worker summary into verified acceptance. Preserve timestamps on mutable observations and honor any requirement for fresh readback.
 
 Distinguish ready, active, blocked, awaiting review, accepted, and complete when useful. Evidence links should explain the state; avoid a rigid lifecycle that does not fit the effort.
 
@@ -68,7 +80,7 @@ Relevant code, standards, context, source artifacts:
 Assigned worktree absolute path / branch / expected artifact:
 Checkout verification and workspace constraints for any child agents:
 Decisions and permissions applicable to this assignment:
-Human review or stop conditions:
+Authorized completion stage / coordinator checkpoints / human review or stop conditions:
 Handoff: use the report below at a meaningful milestone, completion, blocker,
 or decision. State what remains unverified.
 ```
@@ -95,3 +107,5 @@ Use the current overview to explain the project, selecting the details relevant 
 > CI, review, and a small testing-policy correction remain before the pilot comes back for your review. The implementation worker is handling the correction and remaining checks. No decision is needed from you yet; the next review will assess whether this pilot is ready and what should migrate next.
 
 Before sending a progress report or saving the overview, check that a reader can identify the goal, overall status, result's significance, remaining dependency, and next action or decision within about 30 seconds. Keep the explanation understandable without decoding assignment IDs or opening receipts. Retain the supporting metadata and evidence links for inspection. Check each claim against reconciled evidence; label unknowns and keep the example's measurements out of unrelated project reports.
+
+When assessing orchestration efficiency, compare usage per accepted milestone when available, alongside wakeups, repeated reads, rework, completion time, and human clarification requests. Preserve the same acceptance criteria and required checks. Fewer calls alone establish neither a cost saving nor unchanged quality; label unavailable usage data rather than estimating savings from message length.

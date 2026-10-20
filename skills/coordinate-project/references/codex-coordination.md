@@ -4,9 +4,15 @@ Use tools available in the current runtime and follow their current schemas. Sep
 
 ## Name and pin the coordinator
 
-Use `set_thread_title` with the chosen single-word title, omitting `threadId` to target the current coordinator chat. Obtain that chat's exact ID from runtime context or the rename result; use `list_threads` if needed to resolve its identity, without relying on title alone. Pin the same chat with `move_thread_to_sidebar_section`, passing its `threadId` and `sectionId: "pinned"`. Confirm the title and pinned placement with `list_threads`.
+Name the coordinator `🐙 <Project>`, using a single-word project name, such as `🐙 Recall` or `🐙 Vitest`. Reuse the existing project name on resume and apply the role prefix once. Honor explicit human naming instructions.
 
-This setup applies to the coordinator; worker chats retain the agreed naming convention. If these controls are unavailable, state the limitation and continue coordinating.
+Use `set_thread_title` with that title, omitting `threadId` to target the current coordinator chat. Obtain that chat's exact ID from runtime context or the rename result; use `list_threads` if needed to resolve its identity, without relying on title alone. Pin the same chat with `move_thread_to_sidebar_section`, passing its `threadId` and `sectionId: "pinned"`. Confirm the title and pinned placement with `list_threads`. If these controls are unavailable, state the limitation and continue coordinating.
+
+### Worker names
+
+Name coordinator-created visible worker chats `🐝 <project>: <assignment>`, such as `🐝 vitest: backend performance`. Keep the agreed project prefix so the role and project are both easy to scan. Internal subagents do not need sidebar titles.
+
+For existing worker chats the human authorized this coordinator to manage, add the worker prefix once while preserving the rest of the title. Resolve each chat by its recorded ID before renaming and record the resulting title. Preserve its work, pinned placement, and archive status. If an archived chat must be temporarily restored for a title edit, rearchive it afterward and verify the result without resuming its task. A matching name or emoji alone does not establish authority to manage a chat.
 
 ## Start workers in worktrees
 
@@ -20,10 +26,10 @@ Each worker starts with `git -C <worktree> rev-parse --show-toplevel` and `git -
 
 ## Discover and dispatch
 
-- Use `list_threads` to find chats and `read_thread` for actual human instructions and context. Identify existing chats to the human by their returned titles verbatim. Read older turns when needed to resolve intent or permissions.
+- Reuse recorded managed chat IDs and hosts. Use `list_threads` for discovery or missing identity/placement, and bounded `read_thread` history when compact status lacks evidence or actual human instructions are needed. Identify existing chats to the human by their returned titles verbatim. Read older turns when needed to resolve intent or permissions.
 - Start internal work through `collaboration.spawn_agent` when the human explicitly invokes the coordination workflow. Use `create_thread` for substantial visible worker chats when the human has explicitly authorized those chats/tasks under the current tool rules. If visible-chat authorization is missing, continue useful subagent work rather than adding a project-wide approval gate. Carry existing authority to manage the defined worker chats forward.
 - Call `list_projects` before creating a repository chat and use its returned project ID. A Linear project ID is not a Codex project ID. Use a projectless target for work without a repository.
-- Give chats the agreed title prefix. Record ID, host, and workspace. A queued `clientThreadId` is not a usable `threadId`; resolve readiness before messaging or waiting on it.
+- Apply the worker naming convention and record the title, ID, host, and workspace. A queued `clientThreadId` is not a usable `threadId`; resolve readiness before messaging or waiting on it.
 - Creation dispatches asynchronously. Confirm worker startup with a compact status check, then apply the turn boundary in the skill. Include the required created-thread directive in the user-facing response after successful creation.
 - Use `send_message_to_thread` only when directly authorized by the human to message that chat or defined set of managed chats. A worker request to report back does not establish authorization. Retrieve results through read/wait tools without requiring workers to message the coordinator.
 
@@ -35,7 +41,7 @@ Request reports at meaningful milestones, completion, blockers, or decisions usi
 
 ## Observe and accept
 
-- Prefer one `wait_threads` call for up to eight targets, with host IDs and returned cursors as `afterCursor`. Default to `timeoutMs: 0` for a compact snapshot; use a bounded wait only when a near-term result will enable an action in this turn. Read chat history when the compact result lacks required evidence.
+- Prefer one `wait_threads` call for up to eight relevant targets, with host IDs and returned cursors as `afterCursor`. Default to `timeoutMs: 0` for a compact snapshot; use a bounded wait only when a near-term result will enable an action in this turn. Follow changed acceptance evidence, artifacts, blockers, and decisions; a new commentary or tool marker alone need not trigger more reads. Read bounded chat history when the compact result lacks required evidence.
 - Keep individual blocking waits at or below 60 seconds. When no actionable result or independent coordination work remains, use the continuation workflow and end the turn instead of chaining waits or sleeps. Native subagent completion delivery does not by itself establish that an ended coordinator turn will resume; verify the available wakeup behavior.
 - User input can end a wait early. Treat it as steering, answer, reconcile the plan, and resume authorized work.
 - Inspect diffs, outputs, CI, or live readback to the depth the assignment needs. Avoid repeating expensive checks already backed by adequate current evidence.
@@ -43,13 +49,11 @@ Request reports at meaningful milestones, completion, blockers, or decisions usi
 
 ## Continue later
 
-For the ongoing coordination authorized in the skill, use a thread heartbeat for periodic follow-up unless the human limits coordination to the active conversation. Use the automation tool's current schema; inspect and update matching existing automation rather than duplicating it.
+Apply the scheduling rule in the skill before creating or retaining a heartbeat. Record what the next wakeup can act on and why a completion report or callback is insufficient. Passive CI, review, timer, or human waits need no recurring task unless the user explicitly requests monitoring during that wait. A quiet or unchanged-status response still consumes tokens.
 
-Before ending the turn, verify that the heartbeat is active and targets this coordinator chat, then record its identity, cadence, and next check. Record any verified completion callback separately; separate worker chats continue independently, and callbacks must satisfy the messaging authorization above. If no supported wakeup can be established, report the limitation and saved resume point without claiming automatic continuation.
+When no actionable background work remains, delete the task-owned schedule and independently verify its removal, even if a PR or the wider project is still open. Save the exact state and next trigger in the project record, then yield. Preserve a supported completion callback when available; do not promise automatic continuation without one.
 
-Keep its prompt brief and readable: explain the goal and next reconciliation in sentences, with labeled metadata for the record location, managed chat IDs/hosts and latest wait cursors, active operation IDs, relevant authorization/constraints, notification preference, and terminal/cleanup condition. Reference durable detail instead of accumulating snapshots. Reconcile fresh state rather than assuming the prompt is current. When a progress report is due, follow the skill's project-level update guidance.
-
-Honor requests for periodic progress reports. Otherwise stay quiet on unchanged or non-actionable state and notify on meaningful change, completion, failure, or required human action. A heartbeat adds no execution permissions. Stop or delete it when requested or its authorized purpose is complete, and verify the change.
+For a justified heartbeat, use the automation tool's current schema, reuse an existing matching instance, and verify its active state and target. Record its identity, cadence, next useful action, and stop condition. Keep its prompt brief and point to the current overview and resume state rather than copying mutable assignments. Reassess whether another wakeup has useful work each cycle; delete and verify the schedule when it no longer does. Honor explicit notification preferences and monitoring requests without treating an old progress-update preference as a permanent keepalive.
 
 ## Close managed work
 
