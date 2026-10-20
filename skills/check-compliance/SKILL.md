@@ -1,9 +1,9 @@
 ---
-name: compliance
+name: check-compliance
 description: Review changes for adherence to the repository's documented instructions, policies, and guidelines. Use when asked to check repository compliance or review whether changes follow repo guidance. Findings must cite applicable documented rules; this is not a regulatory audit or a general design review.
 ---
 
-# Compliance
+# Check Compliance
 
 Review changes against applicable repository guidance. Every finding must connect a documented rule to a concrete deviation in the changes. Review only; editing, committing, publishing, and posting comments require a separate request.
 
