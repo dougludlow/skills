@@ -24,7 +24,10 @@ Coordinator chat / worker title prefix:
 Tracker and repository links (optional):
 Pilot or representative prior unit (when needed):
 Active operation IDs:
-Worker report delivery / coordinator callback authorization (if applicable):
+Worker type and native report delivery / wait cursors:
+Visible-chat messaging authorization: human source, covered chat IDs, direction, scope / conditions (if applicable):
+Environment preflight: relevant inputs, result / failure category, blocked action and resume condition:
+Artifact destination / producer write access / handling constraints (only when needed):
 Continuation mechanism / identity / verified wakeup behavior / cadence / next check:
 Notification preference / terminal and cleanup condition:
 Next reconciliation action / trigger:
@@ -77,7 +80,9 @@ Work-unit identity and current assignment / attempt:
 Your outcome and acceptance criteria:
 Scope and dependencies; what is already verified:
 Relevant code, standards, context, source artifacts:
-Assigned worktree absolute path / branch / expected artifact:
+Assigned worktree absolute path / branch:
+Artifact destination and confirmed producer write access (only when needed):
+Worker type / native delivery route; applicable visible-chat messaging authorization:
 Checkout verification and workspace constraints for any child agents:
 Decisions and permissions applicable to this assignment:
 Authorized completion stage / coordinator checkpoints / human review or stop conditions:
@@ -85,15 +90,16 @@ Handoff: use the report below at a meaningful milestone, completion, blocker,
 or decision. State what remains unverified.
 ```
 
-Worker report:
+Worker report (keep it concise):
 
 ```text
-Result and what it enables or changes for the parent project:
-Verification performed, evidence, and limits:
-Remaining work, affected dependencies, and new risks (or none):
-Recommended next action or decision:
-Metadata: work unit / assignment, branch / exact artifact version or input
-snapshot, verification method / environment, and evidence links.
+Outcome and project impact:
+Changed files / commit or PR / exact artifact version (when applicable):
+Verification and limits, with evidence links:
+Blockers or unresolved dependencies (or none):
+Artifact paths (only when produced):
+Next action or decision (only when needed):
+Metadata: work unit / assignment; verification environment or input snapshot.
 ```
 
 Use sentences for the explanation and labeled values for metadata. Report implications within the assignment's scope; bring proposed scope changes to the coordinator. Evidence of a completed assignment supports the parent's acceptance review; the coordinator assesses its effect on overall project completion.

@@ -41,8 +41,8 @@ Default to human review at meaningful milestones and material decisions, while c
 
 Choose work units by what can be independently delivered and checked, rather than requiring an agent per issue or phase. Give one worker a coherent deliverable through its appropriate checks and authorized publication stage. Set meaningful correction and acceptance checkpoints in the brief, and let ordinary authorized steps proceed without command-by-command coordinator handoffs. Preserve explicit human review and shared-resource ownership boundaries.
 
-- Use a separate visible chat for substantial work needing its own history, artifacts, PR, or direct human involvement. Follow the [worker naming convention](references/codex-coordination.md#worker-names) with the agreed project prefix.
-- Use a subagent for a bounded investigation, comparison, or review whose result belongs back here, when delegation is authorized.
+- Preserve visible, durable worker chats when the human requests them or the project benefits from independently steerable workers with their own history, artifacts, or direct human involvement. Create them only with explicit human authorization under current tool rules. Follow the [worker naming convention](references/codex-coordination.md#worker-names) with the agreed project prefix.
+- Prefer actual subagents spawned through collaboration tools for bounded implementation, investigation, comparison, or review when appropriate and authorized. Their final answers automatically return to their parent; use collaboration messages for questions and corrections. Independent visible chats created with `create_thread` have a different delivery contract; see [worker communication](references/codex-coordination.md#worker-reports).
 - Keep planning, synthesis, dependency decisions, and human discussion here. Small read-only checks can stay here; honor instructions to delegate all execution.
 
 Assign every repository worker, including child subagents, its own Git worktree before repository work begins. Create or reuse a worktree assigned exclusively to that worker, record its absolute root and branch, and include both in the brief. Require checkout verification before reading, editing, or running repository commands. Carry this requirement into every child brief. If worktree setup or verification fails, hold that assignment and report the limitation; continue independent coordination. Work without a repository can use a projectless workspace.
@@ -58,6 +58,13 @@ Before unfamiliar or large-scale delegation where a bad brief would multiply err
 Start with concurrency that buys useful independence. Give mutable files and shared resources a clear owner. Serialize overlapping edits, shared lockfiles, and conflicting operational actions. Workers should surface new work to the coordinator rather than silently expanding scope or creating a second coordination tree.
 
 Follow the human's model preferences and task needs. If they request the latest Luna, resolve the available ID at runtime and use xhigh when supported; choose a more capable model when needed. Avoid permanently current model IDs in this skill.
+
+## Artifacts and environment preflight
+Use native worker communication for routine status and results. Shared writable directories are for actual deliverables or evidence, such as CSVs and screenshots, rather than status-message files. Assign an artifact destination only when needed, verify it is writable by the producing worker, and prefer a suitable repository/worktree output location or another explicitly available writable root. A parent's chat-specific visualization directory is not a default worker destination. Keep sensitive artifacts within approved handling boundaries; never embed patient records or secrets in command literals.
+
+Perform one small, task-relevant preflight per worker environment before dependent work: confirm the assigned checkout, required tool/access, and artifact destination when applicable. Record the result and reuse it while the relevant environment and inputs remain unchanged. Classify failures as sandbox denial, expired authentication, network/service access, or project test failure so the next action addresses the actual cause. Recheck only affected prerequisites after a material change.
+
+After a denial or known-blocked network operation, stop dependent retries, preserve the error category and scope, and continue independent authorized work. Retry only with new evidence that the cause has changed or a permitted alternative addresses it; known-blocked access must not exhaust a generic retry budget. Use supported approval or authentication flows when needed. Never instruct workers to bypass a rejection, grant themselves access, or weaken safeguards. Report the concrete blocked action and evidence needed to resume.
 
 ## Drive the review loop
 
