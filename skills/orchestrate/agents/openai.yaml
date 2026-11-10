@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrate"
+  short_description: "Orchestrate workers, dependencies, and verified outcomes"
+  default_prompt: "Use $orchestrate to delegate this effort, manage dependencies, integrate worker results, and drive it through verified milestones and human review."

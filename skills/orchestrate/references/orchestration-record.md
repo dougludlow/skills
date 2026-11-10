@@ -20,7 +20,7 @@ Acceptance criteria:
 Scope / excluded work:
 Experiment question, baseline, stopping condition (if applicable):
 Applicable constraints and permissions / human sources:
-Coordinator chat / worker title prefix:
+Orchestrator chat / worker title prefix:
 Tracker and repository links (optional):
 Pilot or representative prior unit (when needed):
 Active operation IDs:
@@ -85,7 +85,7 @@ Artifact destination and confirmed producer write access (only when needed):
 Worker type / native delivery route; applicable visible-chat messaging authorization:
 Checkout verification and workspace constraints for any child agents:
 Decisions and permissions applicable to this assignment:
-Authorized completion stage / coordinator checkpoints / human review or stop conditions:
+Authorized completion stage / orchestrator checkpoints / human review or stop conditions:
 Handoff: use the report below at a meaningful milestone, completion, blocker,
 or decision. State what remains unverified.
 ```
@@ -102,9 +102,9 @@ Next action or decision (only when needed):
 Metadata: work unit / assignment; verification environment or input snapshot.
 ```
 
-Use sentences for the explanation and labeled values for metadata. Report implications within the assignment's scope; bring proposed scope changes to the coordinator. Evidence of a completed assignment supports the parent's acceptance review; the coordinator assesses its effect on overall project completion.
+Use sentences for the explanation and labeled values for metadata. Report implications within the assignment's scope; bring proposed scope changes to the orchestrator. Evidence of a completed assignment supports the parent's acceptance review; the orchestrator assesses its effect on overall project completion.
 
-## Coordinator updates
+## Orchestrator updates
 
 Use the current overview to explain the project, selecting the details relevant to this update rather than reciting every field. For example, during a test-framework migration, an illustrative milestone update could read:
 
