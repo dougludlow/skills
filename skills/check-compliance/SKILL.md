@@ -3,7 +3,9 @@ name: check-compliance
 description: Review changes for adherence to the repository's documented instructions, policies, and guidelines. Use when asked to check repository compliance or review whether changes follow repo guidance. Findings must cite applicable documented rules; this is not a regulatory audit or a general design review.
 ---
 
-# Check Compliance
+# Check compliance
+
+Read and apply the shared [non-negotiables](../implement/references/non-negotiables.md) as review operating rules. Keep the target repository's documented guidance as the basis for findings.
 
 Review changes against applicable repository guidance. Every finding must connect a documented rule to a concrete deviation in the changes. Review only; editing, committing, publishing, and posting comments require a separate request.
 
@@ -18,6 +20,8 @@ Without an explicit scope, review all current work:
 - Account for each layer, but assess the resulting working-tree content once where layers overlap. Use intermediate diffs when needed to understand a change, rather than reporting the same deviation repeatedly.
 
 Record the base, head, local changes included, and material exclusions. If the base cannot be determined and choosing it would change the review, ask for it. If there are no changes in scope, say so rather than reviewing unrelated code.
+
+For a delegated review, inspect that exact snapshot, including any supplied uncommitted and untracked content. Record missing inputs as coverage gaps. If implementation continues during review, retain the reviewed version and identify later changes that need review rather than applying an old conclusion to the new head.
 
 ## Discover governing guidance
 
@@ -43,6 +47,8 @@ Use proportionate read-only checks when they resolve uncertainty. Cite relevant 
 
 Before reporting a finding, verify the rule's applicability, check for exceptions, and confirm the deviation against the actual resulting change. Group instances with a shared cause and correction, citing representative locations.
 
+Independently assess findings supplied by another reviewer. Trace their cited rule and implementation; a confident summary is not evidence. Include an exact command and observed result when a read-only check establishes the deviation. Static evidence is sufficient for a documented structural or workflow rule; do not discard a valid finding merely because it has no executable reproduction.
+
 ## Report
 
 Start with actionable findings ordered by consequence. For each finding include:
@@ -53,4 +59,4 @@ Start with actionable findings ordered by consequence. For each finding include:
 
 Keep unresolved questions separate from established findings. An advisory recommendation is not a mandatory compliance failure. Use the host's supported inline review format when useful, while retaining the rule citation and explanation.
 
-Finish with a brief assessment naming the scope and material coverage limits, including unavailable guidance or unverified workflow requirements. If no deviations were found, say so for the reviewed scope without claiming exhaustive compliance. If there are only advisory findings, make that distinction explicit.
+Finish with a brief assessment naming the base, reviewed head and local snapshot, governing guidance, and material coverage limits, including unavailable guidance or unverified workflow requirements. If no deviations were found, say so for the reviewed scope without claiming exhaustive compliance. If there are only advisory findings, make that distinction explicit. After corrections, recheck affected findings and guidance against the new version; retain earlier assessments at their original scope.

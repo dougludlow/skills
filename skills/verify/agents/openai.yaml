@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify"
+  short_description: "Verify acceptance against the actual delivered result"
+  default_prompt: "Use $verify to check this result against its acceptance criteria, identify the version tested, and report evidence and remaining gaps."

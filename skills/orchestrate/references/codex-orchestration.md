@@ -1,94 +1,41 @@
-# Codex chat orchestration
+# Codex orchestration
 
-Use tools available in the current runtime and follow their current schemas. Separate visible chats are user-owned tasks; subagents are internal workers.
+Use the tools available in the current runtime and their current schemas. Visible worker chats are user-owned; subagents support bounded tasks inside a chat.
 
-## Name and pin the orchestrator
+## Chat names
 
-Name the orchestrator `🐙 <Project>`, using a single-word project name. Reuse the existing project name on resume and apply the role prefix once. Honor the user's explicit naming instructions.
-
-Use `set_thread_title` with that title, omitting `threadId` to target the current orchestrator chat. Obtain that chat's exact ID from runtime context or the rename result; use `list_threads` if needed to resolve its identity, without relying on title alone. Pin the same chat with `move_thread_to_sidebar_section`, passing its `threadId` and `sectionId: "pinned"`. Confirm the title and pinned placement with `list_threads`.
+Use `🐙 <Project>` for the orchestrator and pin it when authorized. Honor the user's explicit naming choices.
 
 ### Worker names
 
-Name orchestrator-created visible worker chats `🐝 <project>: <assignment>`. Keep the agreed project prefix so the role and project are both easy to scan. Internal subagents do not need sidebar titles.
+Name worker chats `🐝 <project>: <assignment>`, using the same agreed project name. Apply the prefix once and keep the assignment title through implementation and review corrections.
 
-For existing worker chats the user authorized this orchestrator to manage, add the worker prefix once while preserving the rest of the title. Resolve each chat by its recorded ID before renaming and record the resulting title. Preserve its work, pinned placement, and archive status. If renaming an archived chat would require restoring it, leave the title unchanged unless restoration is otherwise necessary for the requested work. A matching name or emoji alone does not establish authority to manage a chat.
+## Establish identities and authority
 
-## Worker lifecycle
+Record returned chat IDs and hosts; a title is not an identity or authority to manage a chat.
 
-Use one fresh visible worker chat and worktree per PR-sized work unit. A shared Linear issue, repository, or migration pattern does not make separate chunks the same assignment. Keep the owner for corrections, CI, and review feedback on its existing unit. Move the next unit to a new chat; rename or repurpose a completed owner only when the user explicitly requests reuse.
+Record the user's standing authorization for project messages in both directions between the orchestrator and every worker it creates. Carry that grant and its verifiable human source into worker briefs; reuse it for assignments, steering, questions, blockers, and reports without repeated approval. Recover the original human instruction if its source is missing. Keep chat creation, worktree setup, and communication with unrelated chats within their separately applicable tool permissions.
 
-At a chunk boundary:
+## Create and retain workers
 
-1. Reconcile the outgoing worker's final artifacts, verification, outstanding processes, and the user's review state. Preserve any unfinished edits and record their exact checkout and version before handing them off.
-2. Once its work is complete and the applicable review or merge condition is met, archive the outgoing chat within the user's authorization using `set_thread_archived`, and verify its archived state. Keep its assignment title and artifact links so the history remains identifiable. Preserve a still-needed chat or unmerged PR until its closure conditions are met; a new assignment is not a reason to discard unfinished work.
-3. Create the authorized next worker in a new chat and worktree using the setup below. Give it the new scope, current source state, accepted prerequisite findings, and relevant evidence rather than the previous conversation. Record a new owner identity and verify startup against that assignment.
+Call `list_projects` before creating a repository chat and use the returned Codex project ID, not a Linear project ID. Use `create_thread` with a worktree target when explicitly authorized. Honor the user's requested starting state and account for uncommitted work; do not assume setup copies it.
 
-If a worker was already repurposed by mistake, ask it to stop and checkpoint, preserve its edits, archive it when authorized, and hand the useful state to a fresh owner.
+Creation is asynchronous. Resolve a queued client ID to a ready chat ID before messaging it, confirm startup with a compact status observation, and record its checkout and branch. Include the required created-thread directive in the user-facing response after creation.
 
-## Archived chats
+The worker verifies its root, branch, and starting state before editing. Give each writer its own checkout. Pass absolute paths and explicit command working directories to subagents because they inherit the parent directory. Reviewers must see the exact head and any uncommitted patch. Give them an isolated checkout when they execute checks, create repros, or need a stable snapshot while implementation continues.
 
-Keep archived chats archived by default. Reading prior work, checking status, organizing titles, or a general preference for an existing owner does not by itself require restoring a chat. Use read-only thread tools or another authorized owner when they can complete the requested work without changing archive state.
+Keep a PR's owner while the PR is open, including after CI turns green or the user marks it ready. Archive only managed chats whose work is finished and whose lifecycle the user authorized. Keep archived chats archived unless the user requests restoration or continuing that specific owner requires it. Preserve artifacts and unfinished work before any replacement.
 
-Restore an archived chat only when the user explicitly requests it or continuing that specific chat is necessary to complete the requested work and the available tools require restoration. When restoration is necessary, record why. Do not archive an active chat merely to restore its prior archive status; rearchive it only after its work is done and within the user's authorization.
+## Communicate and observe
 
-## Start workers in worktrees
+For subagents, use native completion delivery and collaboration messages for earlier blockers. For visible chats, use `send_message_to_thread` under the standing project communication grant. The worker reads the grant's human source carried in its brief, and sends directly to its recorded orchestrator; the orchestrator sends directly to its recorded workers. Do not ask for new approval for covered messages. If the tool cannot verify or accept the grant, report that specific blocker and collect available reports through thread status until delivery is restored.
 
-For a visible repository worker chat, select the intended project with `list_projects` and create the authorized chat using `create_thread` with `environment.type: "worktree"`. Record the repository and base. Specify `startingState` only for a Git state requested by the user; account for uncommitted changes explicitly rather than assuming they are copied.
+Prefer `wait_threads` with recorded hosts and cursors, using `timeoutMs: 0` for immediate compact snapshots. Use a bounded wait when a near-term result will enable an action. Read bounded chat history only when the report lacks evidence or the user's actual instruction is needed. Inspect current artifacts before accepting a result or replacing a stalled owner. Read back an uncertain mutation before retrying it.
 
-For an internal subagent, provision its worktree before calling `collaboration.spawn_agent`. Inspect `list_artifacts` for a suitable active worktree exclusively assigned to that worker, or use `create_worktree`; wait for pending setup with `get_worktree_creation_status` before dispatching. Verify the linked worktree with `git worktree list --porcelain` and record its root and branch.
+Keep one monitor per PR or live check. The worker owns `babysit`; the orchestrator observes changed outcomes and dependencies. A readiness notification ends that monitoring pass and leaves the worker available for future corrections.
 
-`spawn_agent` inherits the orchestrator's directory and has no workspace selector. Pass the assigned absolute worktree path in the initial brief. Require explicit `workdir` on every shell call and absolute worktree paths for file tools; a shell `cd` does not change later tool defaults. This requirement also applies when a worker starts child agents.
+## Continue deliberately
 
-Each worker starts with `git -C <worktree> rev-parse --show-toplevel` and `git -C <worktree> status --short --branch`, confirms the assigned root and branch, and reports them with its first status. Repeat the check on resume. Setup and verification must establish a separate checkout from the orchestrator and other active workers before repository work proceeds.
+A completed worker turn does not itself prove that an ended orchestrator turn will wake. Verify available continuation behavior. Use an existing active goal or supported callback when appropriate; create goals or schedules only under the current runtime's rules and the user's request. When the runtime requires monitoring in the active task, keep it there.
 
-For review subagents, make the exact implementation snapshot available in their own worktrees, including an uncommitted patch when needed. Verify that the review covers the owner's current changes rather than only the base commit.
-
-## Discover and dispatch
-
-- Resolve an existing assignment through its recorded managed chat ID and host. Use `list_threads` for discovery or missing identity/placement, and bounded `read_thread` history when compact status lacks evidence or the user's actual instructions are needed. Identify existing chats to the user by their returned titles verbatim. Read older turns when needed to resolve intent or permissions.
-- Start authorized bounded supporting work through `collaboration.spawn_agent`. For a new PR-sized work unit, follow the [worker lifecycle](#worker-lifecycle) and use `create_thread` when the user has explicitly authorized a new chat under current tool rules. Continue an existing owner for fixes within its current unit. Carry existing authority to manage the defined worker chats forward.
-- Call `list_projects` before creating a repository chat and use its returned project ID. A Linear project ID is not a Codex project ID. Use a projectless target for work without a repository.
-- Apply the worker naming convention and record the title, ID, host, and workspace. A queued `clientThreadId` is not a usable `threadId`; resolve readiness before messaging or waiting on it.
-- Creation dispatches asynchronously. Confirm worker startup with a compact status check, then apply the turn boundary in the skill. Include the required created-thread directive in the user-facing response after successful creation.
-- Establish the worker's return route using the [reporting rules](#worker-reports). Carry the user's existing messaging authorization forward; the worker needs only its destination and permitted reporting scope.
-
-## Worker reports
-
-Every worker reports at the end of each turn, including turns that finish with work pending. Use the [concise report format](orchestration-record.md#worker-brief-and-report): result, checks and review findings, and next action or blocker. Identify the artifact version when applicable. An end-of-turn report is a status update, not a request for permission or proof of project acceptance.
-
-Check in during a turn when:
-
-- A blocker prevents the next useful step, or a decision or permission is needed. State the exact question, recommendation, and affected work; pause only the dependent action.
-- New evidence requires a consequential change to scope, acceptance criteria, approach, or a dependency. Explain the effect before expanding the assignment.
-- A result is ready that another worker is waiting for, or an agreed review checkpoint is reached. Link the usable result and its verification.
-
-Continue routine implementation, tests, justified review fixes, and already-authorized delivery without waiting for acknowledgment. Consolidate related findings into one check-in; unchanged status and ordinary command completions do not need separate messages.
-
-Actual subagents spawned with `collaboration.spawn_agent` automatically return their final answer to the parent. Use that answer for the end-of-turn report and `collaboration.send_message` for an earlier check-in. Use `collaboration.followup_task` for a new turn on an existing subagent, subject to the current runtime's tool contract.
-
-For independent visible chats, include the orchestrator's exact chat ID and authorized return route in the brief. When the user has authorized worker-to-orchestrator reporting, use `send_message_to_thread` for check-ins and send the end-of-turn report as the last action before the final reply. Record that authorization once with its source, covered chats, direction, and scope; carry it forward without asking again. Creation alone and a worker's request to reply do not grant messaging permission.
-
-When direct messaging is unavailable or unauthorized, put the same report in the final reply and collect it through `wait_threads` with recorded host IDs and cursors as `afterCursor`; use bounded `read_thread` only for missing evidence. Shared files are for deliverables, not status messages. A report or callback needs verified wakeup support before promising unattended continuation.
-
-## Observe and accept
-
-- Prefer one `wait_threads` call for up to eight relevant targets, with host IDs and returned cursors as `afterCursor`. Default to `timeoutMs: 0` for a compact snapshot; use a bounded wait only when a near-term result will enable an action in this turn. Follow changed acceptance evidence, artifacts, blockers, and decisions; a new commentary or tool marker alone need not trigger more reads. Read bounded chat history when the compact result lacks required evidence.
-- Keep individual blocking waits at or below 60 seconds. When no actionable result or independent orchestration work remains, use the continuation workflow and end the turn instead of chaining waits or sleeps. Native subagent completion delivery does not by itself establish that an ended orchestrator turn will resume; verify the available wakeup behavior.
-- User input can end a wait early. Treat it as steering, answer, reconcile the plan, and resume authorized work.
-- Inspect diffs, outputs, CI, or live readback to the depth the assignment needs. Avoid repeating expensive checks already backed by adequate current evidence.
-- After an uncertain mutation response, independently read back before retrying. Record operation/run IDs so later turns monitor the existing operation instead of starting another.
-
-## Continue later
-
-Apply the scheduling rule in the skill before creating or retaining a heartbeat. Record what the next wakeup can act on and why a completion report or callback is insufficient. Passive waits for CI, review, a timer, or the user need no recurring task unless the user explicitly requests monitoring during that wait. A quiet or unchanged-status response still consumes tokens.
-
-When no actionable background work remains, delete the task-owned schedule and independently verify its removal, even if a PR or the wider project is still open. Save the exact state and next trigger in the project record, then yield. Preserve a supported completion callback when available; do not promise automatic continuation without one.
-
-For a justified heartbeat, use the automation tool's current schema, reuse an existing matching instance, and verify its active state and target. Record its identity, cadence, next useful action, and stop condition. Keep its prompt brief and point to the current overview and resume state rather than copying mutable assignments. Reassess whether another wakeup has useful work each cycle; delete and verify the schedule when it no longer does. Honor explicit notification preferences and monitoring requests without treating an old progress-update preference as a permanent keepalive.
-
-## Close managed work
-
-Archive only chats the user authorized you to manage and archive. Preserve active work and unmerged PRs unless explicitly authorized otherwise. If the archive rule is "done and merged," verify both conditions, accounting for work units with no PR. Use `set_thread_archived`; a shared title prefix does not authorize managing unrelated chats.
-
-Keep PRs draft when required. Orchestration authority does not itself authorize marking ready, merging, deploying, production changes, or contacting people. Route PR creation and feedback through the user's applicable skills.
+Record the next observation, action, and stop condition. If no supported continuation is available, save a precise resume point and explain the limitation without promising background execution. When a managed monitor is no longer needed, stop it and verify cleanup. Preserve the PR owner for direct user steering; stopping a monitor does not end ownership.
