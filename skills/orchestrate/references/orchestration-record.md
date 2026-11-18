@@ -1,6 +1,6 @@
 # Compact project record
 
-Use one record, scaled to the effort. Omit fields that add no value. Its current overview should let the human understand the project's position without reconstructing worker activity. Refresh that overview and the resume state from reconciled evidence after material changes, replacing superseded status. Keep dated history and detailed verification below the current sections or in linked artifacts, with their original scope, version, and observation time. The same separation applies when an existing record uses JSON or another structured format; read the relevant current fields rather than the whole history. Avoid a second ticket system or transcript archive.
+Use one record, scaled to the effort. Omit fields that add no value. Its current overview should let the user understand the project's position without reconstructing worker activity. Refresh that overview and the resume state from reconciled evidence after material changes, replacing superseded status. Keep dated history and detailed verification below the current sections or in linked artifacts, with their original scope, version, and observation time. The same separation applies when an existing record uses JSON or another structured format; read the relevant current fields rather than the whole history. Avoid a second ticket system or transcript archive.
 
 ```markdown
 # <Project or experiment>
@@ -12,20 +12,21 @@ Current milestone and completed outcomes:
 Latest verified result, evidence, and project impact:
 Remaining outcomes and dependency blocking the next milestone:
 Next action and owner:
-Next human review / decision (or none needed):
+Next review / decision for the user (or none needed):
 Last reconciled:
 
 ## Resume state
+User's preferred name / source (when available):
 Acceptance criteria:
 Scope / excluded work:
 Experiment question, baseline, stopping condition (if applicable):
-Applicable constraints and permissions / human sources:
+Applicable constraints and permissions / sources in the user's instructions:
 Orchestrator chat / worker title prefix:
 Tracker and repository links (optional):
 Pilot or representative prior unit (when needed):
 Active operation IDs:
 Worker type and native report delivery / wait cursors:
-Visible-chat messaging authorization: human source, covered chat IDs, direction, scope / conditions (if applicable):
+Visible-chat messaging authorization: source in the user's instructions, covered chat IDs, direction, scope / conditions (if applicable):
 Environment preflight: relevant inputs, result / failure category, blocked action and resume condition:
 Artifact destination / producer write access / handling constraints (only when needed):
 Continuation mechanism / identity / verified wakeup behavior / cadence / next check:
@@ -49,7 +50,7 @@ Next reconciliation action / trigger:
 | --- | --- | --- | --- | --- |
 
 ## Decisions and permissions
-| Decision or allowed action | Scope / conditions | Human source or project decision evidence |
+| Decision or allowed action | Scope / conditions | the user's instruction or project decision evidence |
 | --- | --- | --- |
 
 ## Follow-up and cleanup
@@ -71,47 +72,42 @@ When retries or changed briefs make assignments ambiguous, use a simple attempt 
 
 ## Worker brief and report
 
-Scale the brief to the assignment. State how the outcome contributes to the parent project so the worker can identify relevant dependencies and risks.
+Lead with the implementation plan for this assignment. Include only context that changes how the worker should implement or verify it. The orchestrator keeps assignment identities, project status, wait cursors, and monitoring administration in its own record. The worker needs the return destination and applicable boundaries, not the orchestration procedure. Omit inapplicable fields.
 
 ```text
-Project goal and current milestone:
-How your outcome contributes to the project:
-Work-unit identity and current assignment / attempt:
-Your outcome and acceptance criteria:
-Scope and dependencies; what is already verified:
-Relevant code, standards, context, source artifacts:
-Assigned worktree absolute path / branch:
-Artifact destination and confirmed producer write access (only when needed):
-Worker type / native delivery route; applicable visible-chat messaging authorization:
-Checkout verification and workspace constraints for any child agents:
-Decisions and permissions applicable to this assignment:
-Authorized completion stage / orchestrator checkpoints / human review or stop conditions:
-Handoff: use the report below at a meaningful milestone, completion, blocker,
-or decision. State what remains unverified.
+Implement this plan for <user name>. Refer to them by name.
+<Assignment-specific plan, including scope, expected behavior, and required checks.>
+
+Context: <Relevant code, prerequisite results, and applicable constraints.>
+Worktree: <Absolute root and branch; verify before repository work.>
+Review: Ask one or two subagents to critique the plan, then the implementation.
+Give each a separate verified worktree and the current version or patch.
+Address justified findings.
+Done: <Acceptance criteria and authorized delivery stage, including any review boundary.>
+Report: Send a brief update to <authorized orchestrator chat ID / native parent>
+at the end of every turn. Check in sooner for blockers, required decisions,
+consequential scope or dependency changes, or a result that unblocks others.
+Continue routine work without waiting for acknowledgment.
 ```
 
-Worker report (keep it concise):
+Keep each report to a few sentences, with links for evidence:
 
 ```text
-Outcome and project impact:
-Changed files / commit or PR / exact artifact version (when applicable):
-Verification and limits, with evidence links:
-Blockers or unresolved dependencies (or none):
-Artifact paths (only when produced):
-Next action or decision (only when needed):
-Metadata: work unit / assignment; verification environment or input snapshot.
+Result: <What changed, with a commit, PR, artifact version, or precise diff reference.>
+Checks: <Verification and review outcomes, evidence, and remaining limits.>
+Next: <Next action, waiting condition, or exact blocker / decision needed.>
 ```
 
-Use sentences for the explanation and labeled values for metadata. Report implications within the assignment's scope; bring proposed scope changes to the orchestrator. Evidence of a completed assignment supports the parent's acceptance review; the orchestrator assesses its effect on overall project completion.
+For supporting lookups or reviews, send just the bounded question, relevant sources, workspace if needed, and return route. Keep reports within the assignment's scope; the orchestrator assesses project impact and acceptance. See [worker reporting rules](codex-orchestration.md#worker-reports) for check-in timing and delivery.
 
 ## Orchestrator updates
 
-Use the current overview to explain the project, selecting the details relevant to this update rather than reciting every field. For example, during a test-framework migration, an illustrative milestone update could read:
+Use the current overview to explain the project, selecting the details relevant to this update rather than reciting every field. For a hypothetical feature with API and interface work, an illustrative milestone update could read:
 
-> The integrations pilot has demonstrated a useful improvement, but broader Jest migration remains pending. Fixing a shared test fixture reduced the affected file's warm test time from roughly 26–28 seconds to 5.5–5.7 seconds, while preserving the selected 222 tests and coverage. These measurements apply to the selected tests; the effect on the full suite remains unmeasured.
+> The API changes pass their required checks, but the feature still needs interface integration before it is ready for your review. The combined user flow remains unverified.
 >
-> CI, review, and a small testing-policy correction remain before the pilot comes back for your review. The implementation worker is handling the correction and remaining checks. No decision is needed from you yet; the next review will assess whether this pilot is ready and what should migrate next.
+> The interface worker is connecting the new behavior and will check the complete flow next. No decision is needed from you yet; the next review will assess whether the feature meets the agreed acceptance criteria.
 
-Before sending a progress report or saving the overview, check that a reader can identify the goal, overall status, result's significance, remaining dependency, and next action or decision within about 30 seconds. Keep the explanation understandable without decoding assignment IDs or opening receipts. Retain the supporting metadata and evidence links for inspection. Check each claim against reconciled evidence; label unknowns and keep the example's measurements out of unrelated project reports.
+Before sending a progress report or saving the overview, check that a reader can identify the goal, overall status, result's significance, remaining dependency, and next action or decision within about 30 seconds. Keep the explanation understandable without decoding assignment IDs or opening receipts. Retain the supporting metadata and evidence links for inspection. Check each claim against reconciled evidence and label unknowns.
 
-When assessing orchestration efficiency, compare usage per accepted milestone when available, alongside wakeups, repeated reads, rework, completion time, and human clarification requests. Preserve the same acceptance criteria and required checks. Fewer calls alone establish neither a cost saving nor unchanged quality; label unavailable usage data rather than estimating savings from message length.
+When assessing orchestration efficiency, compare usage per accepted milestone when available, alongside wakeups, repeated reads, rework, completion time, and clarification requests to the user. Preserve the same acceptance criteria and required checks. Fewer calls alone establish neither a cost saving nor unchanged quality; label unavailable usage data rather than estimating savings from message length.
