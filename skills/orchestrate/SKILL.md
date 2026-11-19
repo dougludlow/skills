@@ -20,7 +20,7 @@ An execution request such as `$orchestrate <Linear project or issue URL>` select
 - Create one persistent worker chat and isolated worktree per PR.
 - Communicate directly in both directions between the orchestrator and its workers for assignments, steering, questions, status, blockers, and results.
 - Keep the Linear plan current and delegate implementation, investigation, checks, PR actions, and follow-up corrections.
-- Have workers commit and push their assigned changes, publish draft PRs, address routine feedback and CI failures, and return verified results for the user's personal review.
+- After compliance review, implementation critique, and verification, have workers commit, push, and create draft PRs, then address CI and automated feedback and return verified results for the user's personal review.
 
 Apply these defaults without asking the user to repeat startup instructions. Honor explicit planning-only, read-only, publication, or other scope restrictions and the applicable repository and tool rules. Carry existing human authorization forward; when a tool requires its source, recover that evidence rather than requesting the same grant again. A missing required grant remains subject to that tool's authorization contract.
 

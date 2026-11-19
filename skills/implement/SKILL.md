@@ -1,51 +1,57 @@
 ---
 name: implement
-description: Execute an explicitly assigned PR-sized implementation through independent review, verification, draft-PR delivery, and direct user feedback. Start only when the user or an authorized orchestrator explicitly assigns this workflow.
+description: Execute an explicitly assigned PR-sized implementation through plan critique, implementation, independent review, verification, draft-PR delivery, and direct user feedback.
 metadata:
   inspired-by: https://github.com/cursor/plugins/blob/35a90942a7f02e1ebbc2443643179815f2147954/pstack/skills/poteto-mode/playbooks/autopilot-full.md
 ---
 
 # Implement
 
-Read and apply the shared [non-negotiables](references/non-negotiables.md) when starting or resuming this assignment. Carry their absolute path into every agent kickoff.
+Read and apply the shared [non-negotiables](references/non-negotiables.md). Carry their absolute path into every agent kickoff.
 
-Own this assignment and its PR in this chat. Keep the same checkout and ownership through implementation, CI, automated review, and the user's corrections. The user can steer you directly; routine progress does not need the orchestrator's acknowledgment.
+Start only for an explicit implementation assignment from the user or an authorized orchestrator. Own the assignment and its PR in this chat through implementation, CI, review feedback, and direct user corrections. Resume the same assignment without requiring repeated invocation.
 
-Start this workflow only for an explicit PR implementation assignment from the user or an authorized orchestrator. Ordinary implementation questions, keyword matches, and requests to inspect a PR do not establish that assignment. After assignment, keep the workflow active for corrections to the same PR without requiring repeated invocation.
+Follow the sequence below. Complete compliance review, implementation critique, and verification before invoking `create-pr` to create the PR.
 
-## Recover the assignment
+## 1. Establish the assignment
 
-Read the assignment's plan, acceptance criteria, relevant repository instructions, prerequisites, and delivery permissions. Verify the repository root, worktree, branch, and base before editing. Recover an existing PR and unfinished work before starting another. Follow repository branch conventions and keep unrelated changes intact.
+Read the plan, acceptance criteria, repository guidance, prerequisites, and delivery permissions. Verify the repository root, worktree, branch, and base. Recover existing work and its PR before starting another; preserve unrelated changes.
 
-Resolve ordinary implementation details from the plan and code. Ask for consequential missing behavior or conflicting instructions, then continue independent work. For an orchestrator-created assignment, communication with that orchestrator is part of this role: use the user's standing project grant and verifiable human source supplied in the brief to send status, questions, blockers, and results directly to it. Preserve the grant across turns and resumes without asking for approval per message. A worker assignment does not expand authorization to publish, contact people or unrelated chats, mark a PR ready, merge, deploy, or change production data. Carry the user's existing permissions forward.
+Resolve ordinary implementation choices from the plan and code. Surface consequential missing behavior or conflicting instructions while independent work continues. Carry existing permissions forward, including the user's standing bidirectional communication grant and its verifiable human source when assigned by an orchestrator. Use that grant without approval per message. Preserve the boundaries on publication, unrelated communication, readiness, merge, deployment, and production changes.
 
-## Critique the plan and implement
+## 2. Critique the plan
 
-Before substantial implementation, ask one or two subagents to critique the proposed approach against the requirements, repository architecture, failure cases, and verification. Reuse a relevant planning critique when its inputs still apply. Reconcile justified findings; bring material changes in scope or behavior to the user and orchestrator. Keep small, obvious corrections proportionate.
+Before substantial implementation, have one or two subagents critique the approach against the requirements, architecture, failure cases, and verification. Reuse an applicable earlier critique when its inputs are unchanged. Address justified findings and surface consequential scope or behavior changes before proceeding.
 
-Implement a coherent PR-sized result using the repository's applicable workflows. Give each writing subagent its own worktree and explicit paths. Keep changes independently verifiable, and use a dependent PR only when the assignment requires earlier implementation.
+## 3. Implement and run checks
 
-Use `verify` to connect each acceptance criterion to evidence from the actual result. Prefer existing repository checks and verification harnesses. Report a failed or inaccessible check accurately and preserve the uncovered requirement.
+Implement one coherent PR-sized change using the repository's workflows. Give each writing subagent its own worktree and explicit paths. Run the required checks for the touched projects and inspect the diff. Keep dependent PRs limited to work that needs an earlier implementation.
 
-## Obtain independent review
+## 4. Review the implementation
 
-Review a stable version of the resulting changes before handoff. Ask separate subagents for:
+Have separate subagents review the same stable version:
 
-- Documented-rule review using `check-compliance`, including applicable workflow requirements that are currently due.
-- Plan adherence and implementation quality: missing or incorrect behavior, scope drift, design, and meaningful verification. Use `quality-gate` when available and supply the plan and actual PR base explicitly.
+- Use `check-compliance` to assess applicable documented rules and workflow requirements currently due.
+- Critique plan adherence, correctness, scope, design, and test quality. Use `quality-gate` when available, supplying the plan and actual review base.
 
-Give reviewers the relevant requirements, governing guidance, exact base and head, and any uncommitted snapshot. They must inspect the implementation rather than rely on your summary. Give executing reviewers isolated checkouts containing that version. If subagents or a required source are unavailable, report the review gap rather than claim independent review passed.
+Give reviewers the requirements, governing guidance, exact base and head, and any uncommitted snapshot. They inspect the actual changes. Give executing reviewers isolated checkouts containing that version.
 
-For substantial behavioral changes, have an independent subagent use `verify` to exercise the critical acceptance path. Keep that verification distinct from a `quality-gate` review-only brief. It can be a focused pass rather than a repetition of every author check. For non-code work, choose an equivalent check of the actual deliverable.
+Evaluate each finding, fix justified problems, and explain rejected findings with evidence. Surface consequential disagreements. After fixes, rerun affected checks and obtain focused re-review; substantial behavior or design changes need broader review.
 
-Weigh findings against the code and requirements. Reproduce claimed runtime failures when practical; documentary or design findings can be established by traced code and governing guidance. Address justified findings and explain rejected ones with evidence. Escalate unresolved consequential disagreements. After changes, rerun affected verification and request focused re-review; substantial behavior or design changes need broader independent review.
+## 5. Verify the result
 
-## Deliver and remain steerable
+Use `verify` to establish the acceptance criteria against the reviewed implementation and record the version and evidence. For substantial behavioral changes, have an independent subagent exercise the critical acceptance path. Keep this pass distinct from the review-only `quality-gate` task. For non-code work, check the actual deliverable.
 
-Use the existing `create-pr` skill for authorized publication and PR updates. Open and leave the PR as a draft. Follow repository requirements for attaching the PR to this chat and requesting automated review. A draft can be opened early when authorized so CI runs alongside implementation; publication alone is not a completed handoff.
+If verification requires a fix, return to implementation and refresh the affected reviews and verification. Missing required review or verification evidence is a blocker to PR creation; report the gap and continue independent work.
 
-Use `babysit` for CI and automated feedback within the assignment's granted permissions. Keep this worker as the sole monitoring owner. Preserve current behavioral verification and independent review evidence as the PR changes. Green CI does not establish those other results.
+## 6. Create the draft PR
 
-Hand back the PR and exact head, acceptance evidence from `verify`, independent-review outcomes and finding dispositions, and remaining gaps or decisions. Keep the report short and link detail. For an orchestrator-created assignment, send the report directly to that orchestrator using its recorded chat ID and the standing project communication grant. If delivery is unavailable, leave the same report in this chat for collection and identify the delivery blocker. For a standalone user assignment, report here without requiring an orchestrator. Send earlier check-ins for blockers, changed requirements, or a result that unblocks another assignment.
+After the preceding steps pass, use the existing `create-pr` skill to commit, push, and create the draft PR within the assignment's authority. If PR preparation changes the implementation, refresh affected review and verification before publication. Follow repository requirements for attaching the PR to this chat and requesting automated review.
 
-Remain available in this chat after handoff. Direct user feedback authorizes the requested correction within its stated scope; act on it and refresh affected evidence. Preserve the user's control of review status, including when they have already marked the PR ready for teammate review. Report changes to shared requirements or dependencies so the orchestrator can reconcile Linear and other workers. Keep project-wide tracking with the orchestrator unless the assignment grants you that responsibility. If directions conflict, surface the conflict and hold only the affected work. Readiness, merging, and worker archival remain separate user decisions.
+## 7. Babysit and hand off
+
+Use `babysit` for GitHub CI and automated feedback. Keep this chat as the sole monitoring owner. For corrections, repeat the affected implementation, review, and verification steps before publishing the updated changes to the same PR. Preserve the user's review-status decisions, including when they have already marked it ready for teammate review.
+
+Report the PR and exact head, acceptance evidence, independent-review outcomes, finding dispositions, and remaining gaps or decisions. For an orchestrator-created assignment, send the report directly to its recorded chat ID under the standing communication grant. If delivery is unavailable, leave the report here for collection and identify the blocker. For a standalone assignment, report here. Check in earlier for blockers, changed requirements, or results that unblock others; routine progress needs no acknowledgment.
+
+Remain available for direct user steering after handoff. Report effects on shared requirements or dependencies to the orchestrator, which owns project-wide tracking. Readiness, merging, and archival remain separate user decisions.
