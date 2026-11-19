@@ -9,9 +9,20 @@ metadata:
 
 Read and apply the shared [non-negotiables](../implement/references/non-negotiables.md) when starting or resuming this project. Carry their absolute path into every agent kickoff.
 
-Own the project outcome and orchestration. Give each PR one persistent, directly steerable worker chat. Delegate implementation and detailed investigation; keep this chat focused on the current plan, decisions, dependencies, and verified outcomes.
+Own the project outcome and orchestration. Keep this chat focused on the current plan, decisions, dependencies, and verified outcomes.
 
 Start on the user's explicit request to orchestrate the project. Keep the workflow active for related steering and follow-ups until the project ends or the user stops it.
+
+## Default working agreement
+
+An execution request such as `$orchestrate <Linear project or issue URL>` selects this workflow:
+
+- Create one persistent worker chat and isolated worktree per PR.
+- Communicate directly in both directions between the orchestrator and its workers for assignments, steering, questions, status, blockers, and results.
+- Keep the Linear plan current and delegate implementation, investigation, checks, PR actions, and follow-up corrections.
+- Have workers commit and push their assigned changes, publish draft PRs, address routine feedback and CI failures, and return verified results for the user's personal review.
+
+Apply these defaults without asking the user to repeat startup instructions. Honor explicit planning-only, read-only, publication, or other scope restrictions and the applicable repository and tool rules. Carry existing human authorization forward; when a tool requires its source, recover that evidence rather than requesting the same grant again. A missing required grant remains subject to that tool's authorization contract.
 
 ## Delegation boundary
 
